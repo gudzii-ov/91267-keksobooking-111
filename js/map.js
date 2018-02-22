@@ -166,3 +166,8 @@ var generateOffers = function () {
 };
 
 var offersArray = generateOffers();
+
+/* временно убираем класс .map--faded у блока .map */
+
+var mapElement = document.querySelector('.map');
+mapElement.classList.remove('map--faded');
