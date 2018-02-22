@@ -51,6 +51,9 @@ var OFFER_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+/*
+  Функция generateOffers генерирует уникальные объявления о сдаче недвижимости
+*/
 var generateOffers = function () {
   /*
   * Функция getRandomInteger генерирует случайное целое число в заданном диапазоне
@@ -101,13 +104,15 @@ var generateOffers = function () {
       }
       shuffle(indexes);
 
-      // var featuresToTake = getUnicIndexes(featuresCount);
+      indexes = indexes.slice(0, featuresCount);
 
-      // for (var i = 0; i < featuresCount; i++) {
-      //   var index = featuresToTake[i];
-      //   features[i] = OFFER_FEATURES[index];
-      // }
+      for (var j = 0; j < featuresCount; j++) {
+        var index = indexes[j];
+        features[j] = OFFER_FEATURES[index];
+      }
     }
+
+    return features;
   };
 
   var offersCount = 8;
@@ -128,32 +133,36 @@ var generateOffers = function () {
     var checkin = getRandomProperty(OFFER_TIMES);
     var checkout = getRandomProperty(OFFER_TIMES);
     var features = getFeatures();
+    var photos = OFFER_PHOTOS;
+    shuffle(photos);
+
+    offers[i] = {
+      'author': {
+        'avatar': avatar
+      },
+
+      'offer': {
+        'title': title,
+        'address': address,
+        'price': price,
+        'type': type,
+        'rooms': roomsNumber,
+        'guests': guestsNumber,
+        'checkin': checkin,
+        'checkout': checkout,
+        'features': features,
+        'description': '',
+        'photos': photos
+      },
+
+      'location': {
+        'x': addressX,
+        'y': addressY
+      }
+    };
   }
+
+  return offers;
 };
 
-// var offerTemplate = {
-//   'author': {
-//     'avatar': $avatar
-//   },
-//
-//   'offer': {
-//     'title': $title,
-//     'address': $address,
-//     'price': $price,
-//     'type': $type,
-//     'rooms': $roomsNumber,
-//     'guests': $guestQuota,
-//     'checkin': $checkinTime,
-//     'checkout': $checkoutTime,
-//     'features': $features,
-//     'description': '',
-//     'photos': $photos
-//   },
-//
-//   'location': {
-//     'x': 0,
-//     'y': 0
-//   }
-// };
-//
-// var offers = [];
+var offersArray = generateOffers();
