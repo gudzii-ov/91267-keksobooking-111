@@ -165,7 +165,7 @@ var generateOffers = function () {
   return offers;
 };
 
-var offersArray = generateOffers();
+var generatedOffers = generateOffers();
 
 /* временно убираем класс .map--faded у блока .map */
 
@@ -175,20 +175,37 @@ mapElement.classList.remove('map--faded');
 /* создаем и выводим на экран метки объявлений пользователей
    data - массив исходных данных
 */
-var placePin = function (data) {
-  var mapPinsElement = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
+var generatePins = function (data) {
+  var pins = [];
 
   for (var i = 0; i < data.length; i++) {
-    var pin = document.createElement('button');
     var pinIconWidth = 45;
     var pinIconHeight = 70;
     var addressX = data[i].location.x - Math.floor(pinIconWidth / 2);
     var addressY = data[i].location.y - pinIconHeight;
     var avatar = data[i].author.avatar;
-    pin.classList.add('map__pin');
-    pin.innerHTML = '<img src=' + avatar + ' width="40" height="40" draggable="false">';
-    pin.setAttribute('style', 'left: ' + addressX + 'px; top: ' + addressY + 'px;');
+
+    pins[i] = {
+      'innerHTML': '<img src=' + avatar + ' width="40" height="40" draggable="false">',
+      'classList': 'map__pin',
+      'style': 'left: ' + addressX + 'px; top: ' + addressY + 'px;'
+    };
+
+
+  }
+
+  return pins;
+};
+
+var placePins = function (pins) {
+  var mapPinsElement = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < pins.length; i++) {
+    var pin = document.createElement('button');
+    pin.classList.add(pins[i].classList);
+    pin.innerHTML = pins[i].innerHTML;
+    pin.setAttribute('style', pins[i].style);
 
     fragment.appendChild(pin);
   }
@@ -196,4 +213,6 @@ var placePin = function (data) {
   mapPinsElement.appendChild(fragment);
 };
 
-placePin(offersArray);
+var generatedPins = generatePins(generatedOffers);
+
+placePins(generatedPins);
