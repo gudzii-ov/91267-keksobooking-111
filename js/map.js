@@ -183,7 +183,7 @@ var placePin = function (data) {
     var pin = document.createElement('button');
     var pinIconWidth = 45;
     var pinIconHeight = 70;
-    var addressX = data[i].location.x - (pinIconWidth / 2);
+    var addressX = data[i].location.x - Math.floor(pinIconWidth / 2);
     var addressY = data[i].location.y - pinIconHeight;
     var avatar = data[i].author.avatar;
     pin.classList.add('map__pin');
