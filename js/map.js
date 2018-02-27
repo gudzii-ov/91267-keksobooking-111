@@ -186,6 +186,8 @@ var generatePins = function (data) {
   return pins;
 };
 
+/* функция размещает маркеры в блоке маркеров */
+
 var placePins = function (pins, pinsBlock) {
   var fragment = document.createDocumentFragment();
 
@@ -201,13 +203,16 @@ var placePins = function (pins, pinsBlock) {
   pinsBlock.appendChild(fragment);
 };
 
+/* генерируем данные */
 var generatedOffers = generateOffers();
 
+/* генерируем маркеры на основе данных */
 var generatedPins = generatePins(generatedOffers);
 
 /* временно убираем класс .map--faded у блока .map */
 var mapElement = document.querySelector('.map');
 mapElement.classList.remove('map--faded');
 
+/* добавляем сгенерированные маркеры на карту */
 var mapPinsElement = document.querySelector('.map__pins');
 placePins(generatedPins, mapPinsElement);
