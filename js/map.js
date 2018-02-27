@@ -165,16 +165,7 @@ var generateOffers = function () {
   return offers;
 };
 
-var generatedOffers = generateOffers();
-
-/* временно убираем класс .map--faded у блока .map */
-
-var mapElement = document.querySelector('.map');
-mapElement.classList.remove('map--faded');
-
-/* создаем и выводим на экран метки объявлений пользователей
-   data - массив исходных данных
-*/
+/* функция создает массив меток объявлений пользователей на основе массив исходных данных data*/
 var generatePins = function (data) {
   var pins = [];
 
@@ -190,15 +181,12 @@ var generatePins = function (data) {
       'classList': 'map__pin',
       'style': 'left: ' + addressX + 'px; top: ' + addressY + 'px;'
     };
-
-
   }
 
   return pins;
 };
 
-var placePins = function (pins) {
-  var mapPinsElement = document.querySelector('.map__pins');
+var placePins = function (pins, pinsBlock) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < pins.length; i++) {
@@ -210,9 +198,16 @@ var placePins = function (pins) {
     fragment.appendChild(pin);
   }
 
-  mapPinsElement.appendChild(fragment);
+  pinsBlock.appendChild(fragment);
 };
+
+var generatedOffers = generateOffers();
 
 var generatedPins = generatePins(generatedOffers);
 
-placePins(generatedPins);
+/* временно убираем класс .map--faded у блока .map */
+var mapElement = document.querySelector('.map');
+mapElement.classList.remove('map--faded');
+
+var mapPinsElement = document.querySelector('.map__pins');
+placePins(generatedPins, mapPinsElement);
