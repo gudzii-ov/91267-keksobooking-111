@@ -171,3 +171,29 @@ var offersArray = generateOffers();
 
 var mapElement = document.querySelector('.map');
 mapElement.classList.remove('map--faded');
+
+/* создаем и выводим на экран метки объявлений пользователей
+   data - массив исходных данных
+*/
+var placePin = function (data) {
+  var mapPinsElement = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < data.length; i++) {
+    var pin = document.createElement('button');
+    var pinIconWidth = 45;
+    var pinIconHeight = 70;
+    var addressX = data[i].location.x - (pinIconWidth / 2);
+    var addressY = data[i].location.y - pinIconHeight;
+    var avatar = data[i].author.avatar;
+    pin.classList.add('map__pin');
+    pin.innerHTML = '<img src=' + avatar + ' width="40" height="40" draggable="false">';
+    pin.setAttribute('style', 'left: ' + addressX + 'px; top: ' + addressY + 'px;');
+
+    fragment.appendChild(pin);
+  }
+
+  mapPinsElement.appendChild(fragment);
+};
+
+placePin(offersArray);
