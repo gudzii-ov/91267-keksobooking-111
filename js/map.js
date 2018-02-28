@@ -228,23 +228,40 @@ var getGeneratedOffer = function (index) {
   return offer;
 };
 
-/* соответствие типов жилья назвванию */
-var offerTypes = {
-  'flat': 'Квартира',
-  'house': 'Дом',
-  'bungalo': 'Бунгало'
-};
-
 /* функция показывает карточку объявления */
-var fillInOfferCard = function (offer) {
-  var mapElement = document.querySelector('.map');
+var getOfferCard = function (offer) {
   var offerTemplate = document.querySelector('template').content.children[0];
+  var offerElement = offerTemplate.cloneNode(true);
+
+  /* соответствие типов жилья назвванию */
+  var offerTypes = {
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'bungalo': 'Бунгало'
+  };
 
   var offerTitle = offer.offer.title;
-  var offerAddress = offer.offer.address;
-  var offerPrice = offer.offer.price + "&#x20bd;/ночь";
-  var offerType = offerTypes(offer.offer.type);
-  var guestsAndRooms = offer.offer.rooms + ' комнаты для ' + offer.offer.guests +' гостей';
-  var chekInOut = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
+  offerElement.querySelector('h3') = offerTitle;
 
+  var offerAddress = offer.offer.address;
+  offerElement.querySelector('small') = offerAddress;
+
+  var offerPrice = offer.offer.price + "&#x20bd;/ночь";
+  offerElement.querySelector('.popup__price') = offerPrice;
+
+  var offerType = offerTypes(offer.offer.type);
+  offerElement.querySelector('h4') = offerType;
+
+  var guestsAndRooms = offer.offer.rooms + ' комнаты для ' + offer.offer.guests +' гостей';
+  offerElement.children[6] = guestsAndRooms;
+
+  var chekInOut = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
+  offerElement.children[7] = chekInOut;
+
+  var offerDescription = offer.offer.description;
+  offerElement.children[9] = offerDescription;
+
+
+
+  return offerElement;
 };
