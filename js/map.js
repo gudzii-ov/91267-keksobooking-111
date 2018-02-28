@@ -165,6 +165,12 @@ var generateOffers = function () {
   return offers;
 };
 
+/* функция убирает класс .map--faded у блока .map */
+var showMap = function () {
+  var mapElement = document.querySelector('.map');
+  mapElement.classList.remove('map--faded');
+};
+
 /* функция создает массив меток объявлений пользователей на основе массив исходных данных data*/
 var generatePins = function (data) {
   var pins = [];
@@ -187,8 +193,8 @@ var generatePins = function (data) {
 };
 
 /* функция размещает маркеры в блоке маркеров */
-
-var placePins = function (pins, pinsBlock) {
+var placePins = function (pins) {
+  var mapPinsElement = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < pins.length; i++) {
@@ -200,7 +206,7 @@ var placePins = function (pins, pinsBlock) {
     fragment.appendChild(pin);
   }
 
-  pinsBlock.appendChild(fragment);
+  mapPinsElement.appendChild(fragment);
 };
 
 /* генерируем данные */
@@ -209,10 +215,36 @@ var generatedOffers = generateOffers();
 /* генерируем маркеры на основе данных */
 var generatedPins = generatePins(generatedOffers);
 
-/* временно убираем класс .map--faded у блока .map */
-var mapElement = document.querySelector('.map');
-mapElement.classList.remove('map--faded');
+/* делаем карту активной */
+showMap();
 
 /* добавляем сгенерированные маркеры на карту */
-var mapPinsElement = document.querySelector('.map__pins');
-placePins(generatedPins, mapPinsElement);
+placePins(generatedPins);
+
+/* функция возвращает объект одного объявления */
+var getGeneratedOffer = function (index) {
+  var offer = generatedOffers[index];
+
+  return offer;
+};
+
+/* соответствие типов жилья назвванию */
+var offerTypes = {
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalo': 'Бунгало'
+};
+
+/* функция показывает карточку объявления */
+var fillInOfferCard = function (offer) {
+  var mapElement = document.querySelector('.map');
+  var offerTemplate = document.querySelector('template').content.children[0];
+
+  var offerTitle = offer.offer.title;
+  var offerAddress = offer.offer.address;
+  var offerPrice = offer.offer.price + "&#x20bd;/ночь";
+  var offerType = offerTypes(offer.offer.type);
+  var guestsAndRooms = offer.offer.rooms + ' комнаты для ' + offer.offer.guests +' гостей';
+  var chekInOut = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
+
+};
