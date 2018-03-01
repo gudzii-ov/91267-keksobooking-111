@@ -166,12 +166,6 @@ var generateOffers = function () {
 /* генерируем данные */
 var generatedOffers = generateOffers();
 
-/* функция убирает класс .map--faded у блока .map */
-var showMap = function () {
-  var mapElement = document.querySelector('.map');
-  mapElement.classList.remove('map--faded');
-};
-
 /* функция размещает маркеры в блоке маркеров */
 var placePins = function (offers) {
 
@@ -356,22 +350,30 @@ var setAddressField = function (element, isFirstRun) {
 
 /* обработчик клика на главный маркер */
 var mainPinMouseupHandler = function () {
+  /* активируем карту */
   var mapElement = document.querySelector('.map');
   mapElement.classList.remove('map--faded');
 
-  var mainPin = mapElement.querySelector('.map__pin--main');
-
+  /* активируем форму */
   var formElement = document.querySelector('.notice__form');
   formElement.classList.remove('notice__form--disabled');
 
+  /* активируем поля формы */
   var formInputElements = formElement.children;
   for (var i = 0; i < formInputElements.length; i++) {
     formInputElements[i].removeAttribute('disabled');
   }
 
+  /* деактивируем поле адреса */
   var addressFieldElement = formElement.querySelector('#address');
   addressFieldElement.setAttribute('disabled', 'disabled');
+
+  /* заполняем строку адреса */
+  var mainPin = mapElement.querySelector('.map__pin--main');
   setAddressField(mainPin, false);
+
+  /* показываем метки похожих объявлений */
+  placePins(generatedOffers);
 };
 
 disableFormFields();
