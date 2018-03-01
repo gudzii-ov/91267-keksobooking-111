@@ -51,9 +51,7 @@ var OFFER_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-/*
-  Функция generateOffers генерирует уникальные объявления о сдаче недвижимости
-*/
+/* Функция generateOffers генерирует уникальные объявления о сдаче недвижимости */
 var generateOffers = function () {
   /*
   * Функция getRandomInteger генерирует случайное целое число в заданном диапазоне
@@ -313,11 +311,3 @@ var renderOfferCard = function (offers, index) {
 
   mapElement.insertBefore(offerCard, filtersElement);
 };
-
-/* делаем карту активной */
-showMap();
-
-/* добавляем сгенерированные маркеры на карту */
-placePins(generatedOffers);
-
-renderOfferCard(generatedOffers, 0);
