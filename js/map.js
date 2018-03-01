@@ -321,23 +321,62 @@ var disableFormFields = function () {
   }
 };
 
+/* функция получает размеры и координаты объекта */
+var getElementDimensions = function (element) {
+  var box = element.getBoundingClientRect();
+
+  return {
+    left: box.left + pageXOffset,
+    top: box.top + pageYOffset,
+    right: box.right + pageXOffset,
+    bottom: box.bottom + pageYOffset,
+    width: box.right - box.left,
+    height: box.bottom - box.top
+  };
+};
+
+/* функция заполняет поле адреса в форме пользователя */
+var setAddressField = function (element, isFirstRun) {
+  var dimensions = getElementDimensions(element);
+
+  var pinOffsetX = Math.floor(dimensions.width / 2);
+  var pinOffsetY = Math.floor(dimensions.bottom);
+
+  if (isFirstRun) {
+    pinOffsetY = Math.floor(dimensions.height / 2);
+  }
+
+  var addressX = dimensions.left + pinOffsetX;
+  var addressY = dimensions.top + pinOffsetY;
+
+  var addressFieldElement = document.querySelector('#address');
+  var addressString = addressX + ', ' + addressY;
+  addressFieldElement.setAttribute('placeholder', addressString);
+};
+
 /* обработчик клика на главный маркер */
 var mainPinMouseupHandler = function () {
   var mapElement = document.querySelector('.map');
-
   mapElement.classList.remove('map--faded');
+
+  var mainPin = mapElement.querySelector('.map__pin--main');
 
   var formElement = document.querySelector('.notice__form');
   formElement.classList.remove('notice__form--disabled');
 
   var formInputElements = formElement.children;
-
   for (var i = 0; i < formInputElements.length; i++) {
     formInputElements[i].removeAttribute('disabled');
   }
+
+  var addressFieldElement = formElement.querySelector('#address');
+  addressFieldElement.setAttribute('disabled', 'disabled');
+  setAddressField(mainPin, false);
 };
 
 disableFormFields();
 
 var mainPin = document.querySelector('.map__pin--main');
+setAddressField(mainPin, true);
+
 mainPin.addEventListener('mouseup', mainPinMouseupHandler);
