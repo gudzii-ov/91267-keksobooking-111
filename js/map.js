@@ -174,9 +174,6 @@ var showMap = function () {
   mapElement.classList.remove('map--faded');
 };
 
-/* делаем карту активной */
-showMap();
-
 /* функция размещает маркеры в блоке маркеров */
 var placePins = function (offers) {
 
@@ -219,14 +216,11 @@ var placePins = function (offers) {
   mapPinsElement.appendChild(fragment);
 };
 
-/* добавляем сгенерированные маркеры на карту */
-placePins(generatedOffers);
-
 /* функция отрисовки карточки объявления */
-var renderOfferCard = function (offers) {
+var renderOfferCard = function (offers, index) {
   /* функция возвращает объект одного объявления */
-  var getOffer = function (index) {
-    var offer = offers[index];
+  var getOffer = function (offerIndex) {
+    var offer = offers[offerIndex];
 
     return offer;
   };
@@ -311,7 +305,7 @@ var renderOfferCard = function (offers) {
     return offerElement;
   };
 
-  var offerData = getOffer(0);
+  var offerData = getOffer(index);
   var offerCard = getOfferCard(offerData);
 
   var mapElement = document.querySelector('.map');
@@ -320,4 +314,10 @@ var renderOfferCard = function (offers) {
   mapElement.insertBefore(offerCard, filtersElement);
 };
 
-renderOfferCard(generatedOffers);
+/* делаем карту активной */
+showMap();
+
+/* добавляем сгенерированные маркеры на карту */
+placePins(generatedOffers);
+
+renderOfferCard(generatedOffers, 0);
