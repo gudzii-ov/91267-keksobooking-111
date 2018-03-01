@@ -311,3 +311,33 @@ var renderOfferCard = function (offers, index) {
 
   mapElement.insertBefore(offerCard, filtersElement);
 };
+
+/* функция отключает поля формы */
+var disableFormFields = function () {
+  var formElements = document.querySelector('.notice__form').children;
+
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+/* обработчик клика на главный маркер */
+var mainPinMouseupHandler = function () {
+  var mapElement = document.querySelector('.map');
+
+  mapElement.classList.remove('map--faded');
+
+  var formElement = document.querySelector('.notice__form');
+  formElement.classList.remove('notice__form--disabled');
+
+  var formInputElements = formElement.children;
+
+  for (var i = 0; i < formInputElements.length; i++) {
+    formInputElements[i].removeAttribute('disabled');
+  }
+};
+
+disableFormFields();
+
+var mainPin = document.querySelector('.map__pin--main');
+mainPin.addEventListener('mouseup', mainPinMouseupHandler);
