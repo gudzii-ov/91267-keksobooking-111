@@ -165,37 +165,47 @@ var generateOffers = function () {
   return offers;
 };
 
+/* генерируем данные */
+var generatedOffers = generateOffers();
+
 /* функция убирает класс .map--faded у блока .map */
 var showMap = function () {
   var mapElement = document.querySelector('.map');
   mapElement.classList.remove('map--faded');
 };
 
-/* функция создает массив меток объявлений пользователей на основе массив исходных данных data*/
-var generatePins = function (data) {
-  var pins = [];
-
-  for (var i = 0; i < data.length; i++) {
-    var pinIconWidth = 45;
-    var pinIconHeight = 70;
-    var addressX = data[i].location.x - Math.floor(pinIconWidth / 2);
-    var addressY = data[i].location.y - pinIconHeight;
-    var avatar = data[i].author.avatar;
-
-    pins[i] = {
-      'innerHTML': '<img src=' + avatar + ' width="40" height="40" draggable="false">',
-      'classList': 'map__pin',
-      'style': 'left: ' + addressX + 'px; top: ' + addressY + 'px;'
-    };
-  }
-
-  return pins;
-};
+/* делаем карту активной */
+showMap();
 
 /* функция размещает маркеры в блоке маркеров */
-var placePins = function (pins) {
+var placePins = function (offers) {
+
+  /* функция создает массив меток объявлений пользователей на основе массив исходных данных data*/
+  var generatePins = function (data) {
+    var pins = [];
+
+    for (var i = 0; i < data.length; i++) {
+      var pinIconWidth = 45;
+      var pinIconHeight = 70;
+      var addressX = data[i].location.x - Math.floor(pinIconWidth / 2);
+      var addressY = data[i].location.y - pinIconHeight;
+      var avatar = data[i].author.avatar;
+
+      pins[i] = {
+        'innerHTML': '<img src=' + avatar + ' width="40" height="40" draggable="false">',
+        'classList': 'map__pin',
+        'style': 'left: ' + addressX + 'px; top: ' + addressY + 'px;'
+      };
+    }
+
+    return pins;
+  };
+
   var mapPinsElement = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
+
+  /* генерируем маркеры на основе данных */
+  var pins = generatePins(offers);
 
   for (var i = 0; i < pins.length; i++) {
     var pin = document.createElement('button');
@@ -209,23 +219,14 @@ var placePins = function (pins) {
   mapPinsElement.appendChild(fragment);
 };
 
-/* генерируем данные */
-var generatedOffers = generateOffers();
-
-/* генерируем маркеры на основе данных */
-var generatedPins = generatePins(generatedOffers);
-
-/* делаем карту активной */
-showMap();
-
 /* добавляем сгенерированные маркеры на карту */
-placePins(generatedPins);
+placePins(generatedOffers);
 
 /* функция отрисовки карточки объявления */
-var renderOfferCard = function () {
+var renderOfferCard = function (offers) {
   /* функция возвращает объект одного объявления */
-  var getGeneratedOffer = function (index) {
-    var offer = generatedOffers[index];
+  var getOffer = function (index) {
+    var offer = offers[index];
 
     return offer;
   };
@@ -239,7 +240,7 @@ var renderOfferCard = function () {
         var featureClass = 'feature--' + data[i];
         var featureElement = document.createElement('li');
 
-        featureElement.classList.add('features', featureClass);
+        featureElement.classList.add('feature', featureClass);
         fragment.appendChild(featureElement);
       }
 
@@ -272,7 +273,7 @@ var renderOfferCard = function () {
     var offerAddress = offer.offer.address;
     offerElement.querySelector('small').textContent = offerAddress;
 
-    var offerPrice = offer.offer.price + '&#x20bd;/ночь';
+    var offerPrice = offer.offer.price + '\u20BD/ночь';
     offerElement.querySelector('.popup__price').textContent = offerPrice;
 
     /* соответствие типов жилья назвванию */
@@ -310,9 +311,13 @@ var renderOfferCard = function () {
     return offerElement;
   };
 
-  var offerData = getGeneratedOffer(0);
+  var offerData = getOffer(0);
   var offerCard = getOfferCard(offerData);
 
+  var mapElement = document.querySelector('.map');
+  var filtersElement = mapElement.querySelector('.map__filters-container');
+
+  mapElement.insertBefore(offerCard, filtersElement);
 };
 
-console.log(offerCard);
+renderOfferCard(generatedOffers);
