@@ -168,6 +168,7 @@ var generatedOffers = generateOffers();
 
 // TODO: добавить обработчик нажатия ENTER на маркере для показа объявления
 // TODO: добавить обработчик нажатия ESC на странице для закрывания объявления
+// TODO: изменить процедуру отрисовки объявления - создавать ОДНУ карточку объявления, изменять её данные по кликам на маркерах
 /* функция размещает маркеры в блоке маркеров */
 var placePins = function (offers) {
   /* функция отрисовки карточки объявления */
@@ -378,10 +379,6 @@ var mainPinMouseupHandler = function () {
   for (var i = 0; i < formInputElements.length; i++) {
     formInputElements[i].removeAttribute('disabled');
   }
-
-  /* деактивируем поле адреса */
-  var addressFieldElement = formElement.querySelector('#address');
-  addressFieldElement.setAttribute('disabled', 'disabled');
 
   /* заполняем строку адреса */
   var mainPin = mapElement.querySelector('.map__pin--main');
